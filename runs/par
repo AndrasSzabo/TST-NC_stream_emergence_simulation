@@ -1,0 +1,154 @@
+####
+# CPM parameters
+####
+
+# Cellular Potts parameters ================
+## General model parameters ----------------
+T = 1.0
+Jtable = J.dat
+conn_diss = 0
+insertMediumProb = 1e-1
+border_energy = 2
+EdenGrowth = true
+# note: do not change the following parameters for "long" cells (lambda2>0)
+neighbours = 2
+periodic_boundaries = false
+
+## Cell morphometry ------------------------
+target_area = 25
+target_length = -1
+lambda = 5.0
+lambda2 = 0
+
+## Cell behaviour --------------------------
+
+### Cell polarity ###
+Polarisation = 6.0
+Pol_decay = 0.08
+Pol_decayFree = 0.3
+
+PolarisationPlacode = 12.0
+Pol_decayPlacode = 0.1
+Pol_decayFreePlacode = 0.5
+
+plotPolarityVectors = 0
+polVecPlotLen = 5
+PolDynamicUpdateFree = true
+PolDynamicUpdateContact = true
+
+
+
+### Cytoskeletal bonds ###
+cytosk_bonds = true
+CC[1][1] = 1e-1		Probability of creating a bond, NC-NC
+CC[2][1] = 1e-1		NC-Placode
+CC[2][2] = 1e-1		Placode-Placode
+UCC[1][1] = 100.0	Max stretch of bond, NC-NC
+UCC[2][1] = 100.0	NC-Placode
+UCC[2][2] = 100.0	Placode-Placode
+SC[1][1] = 5.0		NC-NC
+SC[2][1] = 0.0		for NC-Placode
+SC[2][2] = 5.0		Placode-Placode
+breakBondIfNoContact = true
+plotCytoskBonds = 0
+
+### Contact inhibition of locomotion ###
+CIL = true
+CILPlacode = true
+CILprob[1] = 1.0	NC
+CILprob[2] = 1.0	Placode
+repolarisationPM = 0.5
+repolarisationDelay = 8
+plotCILcells = 0
+plotChemotaxCells = 0
+PassiveRelaxationSteps = false
+PassiveRelaxationWindow = 5
+PassiveRelaxationMonitorDH = false
+
+## Cell-cell interactions ------------------
+nJ = 3
+J[0][0] = 0
+J[1][0] = 5.0
+J[1][1] = 3.0		NC-NC interaction
+J[2][0] = 5.0
+J[2][1] = 20.0
+J[2][2] = 10.0		Placode-Placode interaction
+relaxEM[0][0] = 0
+relaxEM[1][0] = 1
+relaxEM[1][1] = 1
+relaxEM[2][0] = 1
+relaxEM[2][1] = 1
+relaxEM[2][2] = 1
+
+
+# Chemical parameters ======================
+n_chem = 3 			# first is CoA, second is Sdf1, third is inhibitory molecule
+diff_coeff = 8, 8, 0.005
+decay_rate = 0.006, 0.006, 0.0006
+secr_rate = 5, 20, 0.7		
+				# CoA is secreted by NCs, Sdf1 is secreted by Placodes
+Sdf1UptakeNC = 10		# NC take up this amount of Sdf1 in their vicinity
+saturation = 0
+vecadherinknockout = false
+extension_only_chemotaxis = true
+chemotaxis = 1
+chemotaxisNC = 1.0, 150.0, -100.0
+chemotaxisPlacode = 0.0, 0.0, 0.0
+pdeExtendedField = true
+pde_initialization = 0		# 0: empty
+
+# initial conditions =======================
+n_init_cells = 1600
+n_NC = 1236
+size_init_cells = 25
+sizex = 180
+sizey = 95
+divisions = 0
+mcs = 3601
+rseed = 0
+subfield = 1
+relaxation = 0
+init_cell_distribution = 14	# 0: random, 1-2: central cluster, 3: central disk, 4: top,
+# 5: top with side padding, 6-7: 2 central clusters,
+# 8: 2 central disks, 9: sandwich, 10: cells on left,
+# 11-12: middle left, 13: NC top cluster, Placodes spread
+# below with extra spacing, 14: top with spaced Placodes
+init_cluster_distance = 20
+init_PL_distance = 6
+sidePadding = 10
+takeoutCellsBelow = -1
+
+# output ===================================
+show_time = false
+storage_stride = 60
+print_asParticles = 600
+print_PIF = 0
+graphics = true
+store = true
+store_start = 0
+storeNCimage = true
+storePLimage = true
+plotcc = 0, 0, 0
+plotccCol = 5, 4, 5
+plotccgrad = 0, 0, 0
+storeccgrad = 0, 1, 0
+storecc = 1, 1, 1
+printcc = true
+colour_cells = 0.0
+colour_active_cells = 0
+datadir = ../runs
+
+# statistics ===============================
+print_sigma = 0
+print_areas = 0
+### print out the centre of mass of cells
+### starts at CMstart 'MCS time'
+### prints 'CMsample' timepoints each at a time-distance of CM from each other
+### this bundle is printed out every CMfreq times
+print_CM = 0
+print_CMstart = 0
+print_CMsample = 0
+print_CMfreq = 0
+print_CMarea = false
+
+
