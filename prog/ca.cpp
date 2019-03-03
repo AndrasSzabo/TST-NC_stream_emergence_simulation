@@ -2832,7 +2832,80 @@ int CellularPotts::GrowInCells(int n_cells, int cell_size, int sx, int sy, int o
       std::cerr << "Warning! Not enough space to initialise all cells! Starting with " << (cellnum-par.n_NC) << " instead of " << (n_cells-par.n_NC) << ".\n";
       cellnum = n_cells;
     }
-  }
+  } else if (par.init_cell_distribution == 16) {
+    // As in "14" but leave the middle 1/3 of the simulation area along the x-axis
+    // free of placodes. 
+    
+    double spacing = sqrt((double)(par.size_init_cells));
+    double stepx, stepy, ncymax=0;
+    int cellnum = 1;
+    int xx,yy,i,j;
+    int xmin, xmax, ymin, ymax;
+    int imx = (int)(sizex / (spacing + 0.1));
+    int imy = (int)(sizey / (spacing + 0.1));
+    int cs = (int)(spacing);
+    // Define placode-free region:
+    int no_pl_min_x = (int)(sizex * 1.0 / 3.0);
+    int no_pl_max_x = (int)(sizex * 2.0 / 3.0);
+    bool addedCell=false;
+  
+    if (cs == 0) cs = 1;
+    for (j=1;j<2;j++){
+      for (i=1;i<imx;i++) {
+        if (cellnum <= par.n_NC){
+	  stepx = spacing * (double) ( i );
+	  stepy = spacing * (double) ( j );
+	  xmin=(int)(double)(stepx);
+	  xmax=(int)(double)(stepx + cs);
+	  ymin=(int)(double)(stepy);
+	  ymax=(int)(double)(stepy + cs);
+	  for (xx=xmin; xx<xmax; xx++){
+	    for (yy=ymin;yy<ymax;yy++){
+	      if (xx>0 && xx<sizex && yy>0 &&yy<sizey) {sigma[xx][yy]=cellnum; addedCell=true;}
+	    }
+	  }
+	  if (addedCell) {cellnum++; addedCell=false; ncymax=ymax;}
+	  else {(*cell)[cellnum].Apoptose(); cellnum++;};
+        }
+      }
+    }
+    
+    // Placodes
+    cellnum=par.n_NC+1;
+    if (par.init_PL_distance >= 0){
+      spacing = par.init_PL_distance;
+    } else {
+      spacing = sqrt((double)(par.size_init_cells));
+    }
+    imx = (int)(sizex / (spacing + 0.1));
+    imy = (int)((sizey-ncymax) / (spacing + 0.1));
+
+    for (j=0;j<imy;j++){
+      for (i=1;i<imx;i++) {
+        if (cellnum <= n_cells){
+	  stepx = spacing * (double) ( i );
+	  stepy = spacing * (double) ( j );
+	  xmin=(int)(double)(stepx);
+	  xmax=(int)(double)(stepx + cs);
+	  ymin=(int)(double)(stepy + ncymax);
+	  ymax=(int)(double)(stepy + ncymax + cs);
+	  for (xx=xmin; xx<xmax; xx++){
+	    for (yy=ymin;yy<ymax;yy++){
+	      if ( ((xx>0 && xx<no_pl_min_x) || (xx>no_pl_max_x && xx<sizex)) 
+			      && yy>0 &&yy<sizey) {sigma[xx][yy]=cellnum; addedCell=true;}
+	    }
+	  }
+	  if (addedCell) {
+	  cellnum++; addedCell=false;}
+	}
+      }
+    }
+    if (cellnum <= n_cells) {
+      std::cerr << "Warning! Not enough space to initialise all cells! Starting with " << (cellnum-par.n_NC) << " instead of " << (n_cells-par.n_NC) << ".\n";
+      cellnum = n_cells;
+    }
+  } 
+  
 
   if (par.EdenGrowth == false) {
     // Do Eden growth for a number of time steps
