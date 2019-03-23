@@ -19,3 +19,5 @@ tst ../runs/par
 ```
 
 Parameters for the simulations are specified in a parameter file `par`. An example is provided in `runs/par`. 
+
+Note: the code has only been tested under Linux. 
