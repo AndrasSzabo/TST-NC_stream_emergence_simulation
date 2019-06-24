@@ -1,5 +1,6 @@
 # TST-NC_stream_emergence_simulation
-Cell-based computational model for simulating stream emergence of neural crest
+Cell-based computational model for simulating stream emergence of neural crest. Published in PLOS Comp Biol: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007002 (DOI: 10.1371/journal.pcbi.1007002).
+
 
 
 The code is based on the Tissue Simulation Toolkit first described in the publication: 
